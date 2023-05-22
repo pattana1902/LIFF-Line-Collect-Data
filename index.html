@@ -1,58 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Data Submission</title>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script src="index.js" defer></script>
+    <meta charset="UTF-8" />
+    <title>Data Collection Form</title>
   </head>
-
   <body>
-    <h1>Data Submission</h1>
-    <form id="dataForm" onsubmit="submitData(event)">
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-      </div>
-      <div>
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required />
-      </div>
-      <div>
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required />
-      </div>
-      <div>
-        <label for="picture">Picture:</label>
-        <input
-          type="file"
-          id="picture"
-          name="picture"
-          accept="image/*"
-          required
-        />
-      </div>
-      <div>
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" readonly />
-        <button
-          type="button"
-          id="captureLocationBtn"
-          onclick="captureLocation()"
-        >
-          Capture Location
-        </button>
-      </div>
-      <div>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required />
-      </div>
-      <button type="submit">Submit</button>
+    <h1>Data Collection Form</h1>
+
+    <form id="dataForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required /><br /><br />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required /><br /><br />
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required /><br /><br />
+
+      <input type="submit" value="Submit" />
     </form>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   </body>
 </html>
