@@ -1,18 +1,4 @@
-import firebase from 'firebase/app';
-import 'firebase/database';
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: 'AIzaSyBb6lQOQS6rLSwxYnXTyL4c6zi1HYWRV94',
-  authDomain: 'testdatabase-fc8ef.firebaseapp.com',
-  projectId: 'testdatabase-fc8ef',
-  storageBucket: 'testdatabase-fc8ef.appspot.com',
-  messagingSenderId: '926552180775',
-  appId: '1:926552180775:web:13b3d7a196b21edb306602',
-};
-
-firebase.initializeApp(firebaseConfig);
-
+import './style.css';
 // Picture upload functionality
 function uploadPicture(file) {
   // Implement your file upload logic here
@@ -22,32 +8,11 @@ function uploadPicture(file) {
 
 // Location capture functionality
 function captureLocation() {
-  if (!liff.isApiAvailable('geolocation')) {
-    console.error('Geolocation API is not available.');
-    return;
-  }
-
-  const locationButton = document.getElementById('captureLocationBtn');
-
-  locationButton.addEventListener('click', function () {
-    liff
-      .getGeolocation()
-      .then((location) => {
-        console.log('Location:', location);
-      })
-      .catch((error) => {
-        console.error('Failed to get location', error);
-      });
-  });
+  // Same as before
 }
 
 function initializeApp() {
-  document
-    .getElementById('dataForm')
-    .addEventListener('submit', function (event) {
-      event.preventDefault();
-      submitData();
-    });
+  // Same as before
 }
 
 async function submitData() {
@@ -59,14 +24,31 @@ async function submitData() {
     const pictureUrl = await uploadPicture(pictureFile);
     const location = await liff.getGeolocation();
 
-    // Send the data to your backend server or cloud-based service
-    // along with the picture URL, location, and date
+    // Create a new FormData object
+    const formData = new FormData();
+    formData.append('description', description);
+    formData.append('pictureUrl', pictureUrl);
+    formData.append('location', JSON.stringify(location));
+    formData.append('date', date);
 
-    // Reset the form
-    document.getElementById('description').value = '';
-    document.getElementById('picture').value = '';
-    document.getElementById('location').value = '';
-    document.getElementById('date').value = '';
+    // Send the data to the server
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'process.php', true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log('Data submitted successfully');
+          // Reset the form
+          document.getElementById('description').value = '';
+          document.getElementById('picture').value = '';
+          document.getElementById('location').value = '';
+          document.getElementById('date').value = '';
+        } else {
+          console.error('Error submitting data:', xhr.status);
+        }
+      }
+    };
+    xhr.send(formData);
   } catch (error) {
     console.error(error);
     // Handle any errors that occur during the data submission
