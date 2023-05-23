@@ -1,53 +1,80 @@
-window.onload = function () {
-  initializeLIFF();
+import './style.css';
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: 'AIzaSyCVbV7T7_KIPg5SXdS8w6OEVAsFFHoq3_c',
+  authDomain: 'liff-db.firebaseapp.com',
+  databaseURL:
+    'https://liff-db-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'liff-db',
+  storageBucket: 'liff-db.appspot.com',
+  messagingSenderId: '762947850725',
+  appId: '1:762947850725:web:e46cb7da49ad802eb85f0c',
 };
 
-async function initializeLIFF() {
-  try {
-    await liff.init({ liffId: '1661198134-jKzpyDgB' });
-    document.getElementById('dataForm').addEventListener('submit', submitData);
-  } catch (error) {
-    console.error('LIFF initialization failed:', error);
-  }
-}
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-function submitData(event) {
-  event.preventDefault();
+// Get a reference to the database service
+var database = firebase.database();
 
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData.entries());
+// Handle form submission
+document
+  .getElementById('dataEntryForm')
+  .addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent form submission
 
-  // Send the data to your backend server or perform any desired actions
-  sendDataToServer(data)
-    .then((response) => {
-      console.log('Data submitted successfully');
-      console.log('Server response:', response);
-      liff.closeWindow();
-    })
-    .catch((error) => {
-      console.error('Error submitting data:', error);
+    // Get the input values
+    var name = document.getElementById('nameInput').value;
+    var email = document.getElementById('emailInput').value;
+    var tel = document.getElementById('telInput').value;
+    var detail = document.getElementById('detailInput').value;
+    var picture = document.getElementById('pictureInput').value; // Note: Currently, you can only get the file name, not the file itself
+    var latitude = document.getElementById('latitudeInput').value;
+    var longitude = document.getElementById('longitudeInput').value;
+
+    // Save the data to Firebase
+    database.ref('entries').push({
+      name: name,
+      email: email,
+      tel: tel,
+      detail: detail,
+      picture: picture,
+      latitude: latitude,
+      longitude: longitude,
     });
-}
 
-function sendDataToServer(data) {
-  // Modify the URL and request method as per your backend server's API endpoint
-  const url = 'https://your-backend-server.com/api/data';
-  const method = 'POST';
+    // Clear the form
+    document.getElementById('dataEntryForm').reset();
+  });
 
-  // Modify the headers and body payload based on your backend server's requirements
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-  const body = JSON.stringify(data);
+// Handle "Get Location" button click
+document
+  .getElementById('getLocationBtn')
+  .addEventListener('click', function () {
+    // Get the user's current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
 
-  // Send the HTTP request using fetch API
-  return fetch(url, {
-    method: method,
-    headers: headers,
-    body: body,
-  })
-    .then((response) => response.json())
-    .catch((error) => {
-      throw new Error('Failed to send data to server');
-    });
-}
+          // Format the location as text
+          var locationText =
+            'Latitude: ' + latitude + ', Longitude: ' + longitude;
+
+          // Display the location
+          document.getElementById('locationDisplay').textContent = locationText;
+
+          // Update the input fields with the location values
+          document.getElementById('latitudeInput').value = latitude;
+          document.getElementById('longitudeInput').value = longitude;
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  });

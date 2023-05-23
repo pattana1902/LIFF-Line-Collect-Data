@@ -1,25 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Data Collection Form</title>
+    <title>Firebase Data Entry</title>
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="index.js"></script>
+    <style>
+      /* Add your custom CSS styles here */
+    </style>
   </head>
   <body>
-    <h1>Data Collection Form</h1>
+    <form id="dataEntryForm">
+      <label for="nameInput">Name:</label>
+      <input type="text" id="nameInput" required /><br />
 
-    <form id="dataForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required /><br /><br />
+      <label for="emailInput">Email:</label>
+      <input type="email" id="emailInput" required /><br />
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required /><br /><br />
+      <label for="telInput">Telephone:</label>
+      <input type="tel" id="telInput" required /><br />
 
-      <label for="age">Age:</label>
-      <input type="number" id="age" name="age" required /><br /><br />
+      <label for="detailInput">Detail:</label>
+      <textarea id="detailInput" required></textarea><br />
 
-      <input type="submit" value="Submit" />
+      <label for="pictureInput">Picture:</label>
+      <input type="file" id="pictureInput" required /><br />
+      <button id="getLocationBtn" type="button">Get Location</button>
+      <p id="locationDisplay"></p>
+      <input type="hidden" id="latitudeInput" />
+      <input type="hidden" id="longitudeInput" />
+
+      <button type="submit">Submit</button>
+      <!-- Add the button for getting location -->
     </form>
-
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   </body>
 </html>
